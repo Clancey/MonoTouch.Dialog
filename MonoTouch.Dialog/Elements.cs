@@ -123,6 +123,10 @@ namespace MonoTouch.Dialog
 		public virtual void Deselected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
 		}
+		public virtual void AccessoryButtonTapped(DialogViewController dvc, UITableView tableview, NSIndexPath path)
+		{
+			
+		}
 		
 		/// <summary>
 		/// If the cell is attached will return the immediate RootElement
@@ -1455,6 +1459,7 @@ namespace MonoTouch.Dialog
 		static NSString ekey = new NSString ("EntryElement");
 		bool isPassword, becomeResponder;
 		public UITextField entry;
+		public bool ShouldAutoCorrect = true;
 		string placeholder;
 		static UIFont font = UIFont.BoldSystemFontOfSize (17);
 		public void CloseKeyboard()
@@ -1622,7 +1627,7 @@ namespace MonoTouch.Dialog
 				becomeResponder = false;
 			}
 			entry.KeyboardType = KeyboardType;
-			
+			entry.AutocorrectionType  = ShouldAutoCorrect ? UITextAutocorrectionType.Yes : UITextAutocorrectionType.No;
 			cell.TextLabel.Text = Caption;
 			cell.ContentView.AddSubview (entry);
 			return cell;
@@ -2306,8 +2311,25 @@ namespace MonoTouch.Dialog
 			}
 			
 			tableView.BeginUpdates();
-			tableView.DeleteRows(indexPathsToInsert.ToArray(),UITableViewRowAnimation.Bottom);
+			tableView.DeleteRows(indexPathsToInsert.ToArray(),UITableViewRowAnimation.Middle);
 			tableView.EndUpdates();
+		}
+		string _indexString;
+		public string IndexString
+		{
+			get{
+				if(_indexString != null)
+					return _indexString;
+				if(!string.IsNullOrEmpty(Caption))
+				{
+					_indexString = Caption.Substring(0,1);					
+					return _indexString;
+				}
+				return "";
+			}
+			set{
+				_indexString = value;
+			}
 		}
 		
 		internal int Index;
@@ -2390,7 +2412,7 @@ namespace MonoTouch.Dialog
 			element.Parent = this;
 			Elements.Add (element);
 			
-			if (Parent != null)
+			if (Parent != null && !collaped)
 				InsertVisual (Elements.Count-1, UITableViewRowAnimation.None, 1);
 		}
 
@@ -2769,7 +2791,7 @@ namespace MonoTouch.Dialog
 			this.group = group;
 		}
 		
-		internal List<Section> Sections = new List<Section> ();
+		public List<Section> Sections = new List<Section> ();
 
 		internal NSIndexPath PathForRadio (int idx)
 		{

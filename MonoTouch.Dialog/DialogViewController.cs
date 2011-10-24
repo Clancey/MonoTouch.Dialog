@@ -164,6 +164,7 @@ namespace MonoTouch.Dialog
 		public bool Autorotate { get; set; }
 		
 		public bool IncludeIndex { get; set; }
+		public bool CombineSectionIndex {get;set;}
 		
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
@@ -367,6 +368,12 @@ namespace MonoTouch.Dialog
 				Container.Deselected(indexPath);
 			}
 			
+			public override void AccessoryButtonTapped (UITableView tableView, NSIndexPath indexPath)
+			{
+				
+				Container.AccessoryButtonTapped(indexPath);
+			}
+			
 			public override UIView GetViewForHeader (UITableView tableView, int sectionIdx)
 			{
 				var section = Root.Sections [sectionIdx];
@@ -396,21 +403,32 @@ namespace MonoTouch.Dialog
 					return -1;
 				return section.FooterView.Frame.Height;
 			}
-			public override string[] SectionIndexTitles (UITableView tableView)
+			NSArray array;
+			[Export ("sectionIndexTitlesForTableView:")]
+			public NSArray SectionIndexTitles (UITableView tableView)
 			{
-				List<string> titles = new List<string>();
 				if(Container.IncludeIndex)
 				{
-					var titleArray = Root.Sections.Select(x => x.Caption.Substring(0,1)).ToArray();
-					return titleArray;
+						string[] titleArray; 
+					if(Container.CombineSectionIndex)
+						titleArray = Root.Sections.Select(x => x.IndexString).Distinct().ToArray();
+					else
+						titleArray = Root.Sections.Select(x => x.IndexString).ToArray();
+					array = NSArray.FromStrings (titleArray);
+			
+					
 				}
-				return titles.ToArray();
+				
+			    return array;
 			}
 			
 			public override int SectionFor (UITableView tableView, string title, int atIndex)
 			{
+				if(Container.CombineSectionIndex && !string.IsNullOrEmpty(title) )
+					return Root.Sections.Where(x=> x.IndexString == title).First().Index;
 				return atIndex;
 			}
+			
 			
 			
 			#region Pull to Refresh support
@@ -517,11 +535,11 @@ namespace MonoTouch.Dialog
 				};
 				if (SearchPlaceholder != null)
 					searchBar.Placeholder = this.SearchPlaceholder;
-				tableView.TableHeaderView = new UIView(new RectangleF(0,0,tableView.Bounds.Width,100));
-				tableView.TableHeaderView.AddSubview(searchBar);
+				//tableView.TableHeaderView = new UIView(new RectangleF(0,0,tableView.Bounds.Width,100));
+				tableView.TableHeaderView = searchBar;
 			} else {
 				// Does not work with current Monotouch, will work with 3.0
-				// tableView.TableHeaderView = null;
+				 tableView.TableHeaderView = null;
 			}
 		}
 		
@@ -541,6 +559,15 @@ namespace MonoTouch.Dialog
 			element.Deselected (this, tableView, indexPath);
 		}
 		
+		public virtual void AccessoryButtonTapped(NSIndexPath indexPath)
+		{
+			
+			var section = root.Sections [indexPath.Section];
+			var element = section.Elements [indexPath.Row];
+
+			element.AccessoryButtonTapped (this, tableView, indexPath);
+		}
+		
 		public virtual UITableView MakeTableView (RectangleF bounds, UITableViewStyle style)
 		{
 			return new UITableView (bounds, style);
@@ -551,7 +578,7 @@ namespace MonoTouch.Dialog
 			tableView = MakeTableView (UIScreen.MainScreen.Bounds, Style);
 			tableView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin;
 			tableView.AutosizesSubviews = true;
-			tableView.SectionIndexMinimumDisplayRowCount = 10;
+			tableView.SectionIndexMinimumDisplayRowCount = 0;
 			
 			UpdateSource ();
 			View = tableView;
