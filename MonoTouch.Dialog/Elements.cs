@@ -643,12 +643,13 @@ namespace MonoTouch.Dialog
 		{
 			return Caption;
 		}
-		
+		public bool ShouldDeselect = true;
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath indexPath)
 		{
 			if (Tapped != null)
 				Tapped ();
-			tableView.DeselectRow (indexPath, true);
+			if(ShouldDeselect)
+				tableView.DeselectRow (indexPath, true);
 		}
 		
 		public override bool Matches (string text)

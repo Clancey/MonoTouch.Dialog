@@ -28,6 +28,7 @@ namespace MonoTouch.Dialog
 		bool pushing;
 		bool dirty;
 		bool reloading;
+		public Action<NSIndexPath> OnSelection{get;set;}
 
 		/// <summary>
 		/// The root element displayed by the DialogViewController, the value can be changed during runtime to update the contents.
@@ -361,6 +362,8 @@ namespace MonoTouch.Dialog
 			
 			public override void RowSelected (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
+				if(Container.OnSelection != null)
+					Container.OnSelection(indexPath);
 				Container.Selected (indexPath);
 			}	
 			public override void RowDeselected (UITableView tableView, NSIndexPath indexPath)
