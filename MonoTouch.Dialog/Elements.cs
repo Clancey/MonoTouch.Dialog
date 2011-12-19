@@ -871,7 +871,7 @@ namespace MonoTouch.Dialog
 			this.Accessory = UITableViewCellAccessory.None;
 		}
 		
-		public ImageStringElement (string caption,  NSAction tapped, UIImage image) : base (caption, tapped)
+		public ImageStringElement (string caption, UIImage image, NSAction tapped) : base (caption, tapped)
 		{
 			this.image = image;
 			this.Accessory = UITableViewCellAccessory.None;
@@ -1463,6 +1463,7 @@ namespace MonoTouch.Dialog
 		public bool ShouldAutoCorrect = true;
 		string placeholder;
 		static UIFont font = UIFont.BoldSystemFontOfSize (17);
+		public Action ReturnPressed {get;set;}
 		public void CloseKeyboard()
 		{
 			entry.ResignFirstResponder();
@@ -1595,7 +1596,8 @@ namespace MonoTouch.Dialog
 						focus.entry.BecomeFirstResponder ();
 					else 
 						focus.entry.ResignFirstResponder ();
-					
+					if(ReturnPressed != null)
+						ReturnPressed();
 					return true;
 				};
 				entry.Started += delegate {
@@ -1615,8 +1617,8 @@ namespace MonoTouch.Dialog
 					entry.ReturnKeyType = returnType;
 				};
 				entry.EditingDidBegin += delegate {
-					if (tv.IndexPathForSelectedRow != null && tv.IndexPathForSelectedRow != this.IndexPath)
-						dvc.Deselected(tv.IndexPathForSelectedRow);
+					//if (tv.IndexPathForSelectedRow != null && tv.IndexPathForSelectedRow != this.IndexPath)
+					//	dvc.Deselected(tv.IndexPathForSelectedRow);
 					tv.SelectRow(this.IndexPath,true, UITableViewScrollPosition.None);
 					dvc.Selected(this.IndexPath);
 					

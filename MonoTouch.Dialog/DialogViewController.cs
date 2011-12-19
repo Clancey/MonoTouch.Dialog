@@ -687,6 +687,7 @@ namespace MonoTouch.Dialog
 		
 		public DialogViewController (UITableViewStyle style, RootElement root) : base (style)
 		{
+			Style = style;
 			PrepareRoot (root);
 		}
 		
