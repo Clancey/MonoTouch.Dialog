@@ -5,8 +5,12 @@
 	<key>CFBundleIdentifier</key>
 	<string>iiii</string>
 	<key>MinimumOSVersion</key>
-	<string>3.2</string>
+	<string>6.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+	</array>
 </dict>
 </plist>

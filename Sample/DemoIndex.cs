@@ -44,11 +44,11 @@ namespace Sample
 	            this.parent = parent;
 	        }
 	
-	        public override string[] SectionIndexTitles (UITableView tableView)
-	        {
-				var j = parent.GetSectionTitles ();
-				return j;
-	        }
+	       // public override string[] SectionIndexTitles (UITableView tableView)
+	        //{
+			//	var j = parent.GetSectionTitles ();
+			//	return j;
+	        //}
 	    }
 
 		class SizingIndexedSource : Source {
@@ -59,11 +59,11 @@ namespace Sample
 	            this.parent = parent;
 	        }
 	
-	        public override string[] SectionIndexTitles (UITableView tableView)
-	        {
-				var j = parent.GetSectionTitles ();
-				return j;
-	        }
+	       // public override string[] SectionIndexTitles (UITableView tableView)
+	       // {
+			//	var j = parent.GetSectionTitles ();
+			//	return j;
+	        //}
 	    }
 
 		public override Source CreateSizingSource (bool unevenRows)

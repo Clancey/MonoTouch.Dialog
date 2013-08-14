@@ -179,7 +179,7 @@ namespace MonoTouch.Dialog.Utilities
 		public static UIImage DefaultRequestImage (Uri uri, IImageUpdated notify)
 		{
 			if (DefaultLoader == null)
-				DefaultLoader = new ImageLoader (50, 4*1024*1024);
+				DefaultLoader = new ImageLoader (50, 10*1024*1024);
 			return DefaultLoader.RequestImage (uri, notify);
 		}
 		

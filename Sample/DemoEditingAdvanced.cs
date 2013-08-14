@@ -25,7 +25,15 @@ namespace Sample
 				// Trivial implementation: we let all rows be editable, regardless of section or row
 				return true;
 			}
-			
+
+			public override bool CanMoveRow (UITableView tableView, NSIndexPath indexPath)
+			{
+				return true;
+			}
+			public override void MoveRow (UITableView tableView, NSIndexPath sourceIndexPath, NSIndexPath destinationIndexPath)
+			{
+				Console.WriteLine("MoveRow");
+			}
 			public override UITableViewCellEditingStyle EditingStyleForRow (UITableView tableView, NSIndexPath indexPath)
 			{
 				// trivial implementation: show a delete button always

@@ -20,6 +20,10 @@ namespace MonoTouch.Dialog
 {
 	public class DialogViewController : UITableViewController
 	{
+		public DialogViewController (IntPtr handle): base(handle)
+		{
+		}
+		static readonly Version Version = new System.Version (UIDevice.CurrentDevice.SystemVersion);
 		public UITableViewStyle Style = UITableViewStyle.Grouped;
 		public UISearchBar searchBar;
 		private UITableView tableView;
@@ -110,6 +114,7 @@ namespace MonoTouch.Dialog
 		/// should start the background operation to fetch the data and when it completes
 		/// it should call ReloadComplete to restore the control state.
 		/// </remarks>
+
 		public void TriggerRefresh ()
 		{
 			TriggerRefresh (false);
@@ -117,6 +122,7 @@ namespace MonoTouch.Dialog
 		
 		void TriggerRefresh (bool showStatus)
 		{
+
 			if (refreshRequested == null)
 				return;
 
@@ -141,6 +147,12 @@ namespace MonoTouch.Dialog
 		/// </summary>
 		public void ReloadComplete ()
 		{
+			if (Version.Major >= 6) {
+				
+				RefreshControl.AttributedTitle = new NSAttributedString(String.Format ("Last Updated: {0:g}",DateTime.Now));
+				RefreshControl.EndRefreshing();
+				return;
+			}
 			if (refreshView != null)
 				refreshView.LastUpdate = DateTime.Now;
 			if (!reloading)
@@ -317,7 +329,16 @@ namespace MonoTouch.Dialog
 				this.Container = container;
 				Root = container.root;
 			}
-			
+//			public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+//			{
+//				var section = Root.Sections [indexPath.Section];
+//				var element = section.Elements [indexPath.Row];
+//				
+//				var sizable = element as IElementSizing;
+//				if (sizable == null)
+//					return tableView.RowHeight;
+//				return sizable.GetHeight (tableView, indexPath);
+//			}
 			public override int RowsInSection (UITableView tableview, int section)
 			{
 				var s = Root.Sections [section];
@@ -346,7 +367,7 @@ namespace MonoTouch.Dialog
 				var section = Root.Sections [indexPath.Section];
 				var element = section.Elements [indexPath.Row];
 				element.Row = indexPath.Row;
-				return element.GetCell (Container,tableView);
+				return element.GetCell (tableView);
 			}
 			
 			public override void WillDisplay (UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
@@ -407,9 +428,9 @@ namespace MonoTouch.Dialog
 					return -1;
 				return section.FooterView.Frame.Height;
 			}
+			/*
 			NSArray array;
-			[Export ("sectionIndexTitlesForTableView:")]
-			public NSArray SectionIndexTitles (UITableView tableView)
+			public override string[] SectionIndexTitles (UITableView tableView)
 			{
 				if(Container.IncludeIndex)
 				{
@@ -425,7 +446,7 @@ namespace MonoTouch.Dialog
 				
 			    return array;
 			}
-			
+			*/
 			public override int SectionFor (UITableView tableView, string title, int atIndex)
 			{
 				if(Container.CombineSectionIndex && !string.IsNullOrEmpty(title) )
@@ -438,6 +459,8 @@ namespace MonoTouch.Dialog
 			#region Pull to Refresh support
 			public override void Scrolled (UIScrollView scrollView)
 			{
+				if(DialogViewController.Version.Major >= 6)
+					return;
 				if (!checkForRefresh)
 					return;
 				if (Container.reloading)
@@ -459,11 +482,15 @@ namespace MonoTouch.Dialog
 			
 			public override void DraggingStarted (UIScrollView scrollView)
 			{
+				if(DialogViewController.Version.Major >= 6)
+					return;
 				checkForRefresh = true;
 			}
 			
 			public override void DraggingEnded (UIScrollView scrollView, bool willDecelerate)
 			{
+				if(DialogViewController.Version.Major >=6)
+					return;
 				if (Container.refreshView == null)
 					return;
 				
@@ -481,7 +508,9 @@ namespace MonoTouch.Dialog
 		// model that is used only when we have items that require resizing
 		//
 		public class SizingSource : Source {
-			public SizingSource (DialogViewController controller) : base (controller) {}
+			public SizingSource (DialogViewController controller) : base (controller) {
+				//Console.WriteLine("Sizing Source");
+			}
 			
 			public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
@@ -600,10 +629,20 @@ namespace MonoTouch.Dialog
 				// The dimensions should be large enough so that even if the user scrolls, we render the
 				// whole are with the background color.
 				var bounds = View.Bounds;
-				refreshView = MakeRefreshTableHeaderView (new RectangleF (0, -bounds.Height, bounds.Width, bounds.Height));
-				if (reloading)
-					refreshView.SetActivity (true);
-				TableView.AddSubview (refreshView);
+				if(DialogViewController.Version.Major >= 6)
+				{
+					RefreshControl = new UIRefreshControl();
+					RefreshControl.AttributedTitle = new NSAttributedString("Pull down to refresh...");
+					RefreshControl.ValueChanged += delegate {
+						refreshRequested(this, EventArgs.Empty);
+					};
+				}
+				else {
+					refreshView = MakeRefreshTableHeaderView (new RectangleF (0, -bounds.Height, bounds.Width, bounds.Height));
+					if (reloading)
+						refreshView.SetActivity (true);
+						TableView.AddSubview (refreshView);
+				}
 			}
 		}
 		
@@ -638,6 +677,7 @@ namespace MonoTouch.Dialog
 
 		public virtual Source CreateSizingSource (bool unevenRows)
 		{
+			//return new Source (this);
 			return unevenRows ? new SizingSource (this) : new Source (this);
 		}
 		
@@ -660,7 +700,13 @@ namespace MonoTouch.Dialog
 			root.Prepare ();
 			if (tableView != null){
 				UpdateSource ();
+				try{
 				tableView.ReloadData ();
+				}
+				catch(Exception ex)
+				{
+					Console.WriteLine(ex);
+				}
 			}
 			dirty = false;
 		}

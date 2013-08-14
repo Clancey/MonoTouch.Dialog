@@ -28,7 +28,7 @@ namespace Sample
 		{
 			return new RootElement ("Settings") {
 				new Section (){
-					new BooleanElement ("Airplane Mode", false),
+					new StringElement ("Airplane Mode"),
 					new RootElement ("Notifications", 0, 0) {
 						new Section (null, "Turn off Notifications to disable Sounds\n" +
 							     "Alerts and Home Screen Badges for the\napplications below."){
