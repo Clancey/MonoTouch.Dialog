@@ -69,7 +69,7 @@ namespace MonoTouch.Dialog.Utilities
 	public class ImageLoader
 	{
         public readonly static string BaseDir = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "..");
-		const int MaxRequests = 6;
+		const int MaxRequests = 20;
 		static string PicDir; 
 		
 		// Cache of recently used images
@@ -179,7 +179,7 @@ namespace MonoTouch.Dialog.Utilities
 		public static UIImage DefaultRequestImage (Uri uri, IImageUpdated notify)
 		{
 			if (DefaultLoader == null)
-				DefaultLoader = new ImageLoader (50, 10*1024*1024);
+				DefaultLoader = new ImageLoader (50, 30*1024*1024);
 			return DefaultLoader.RequestImage (uri, notify);
 		}
 		
