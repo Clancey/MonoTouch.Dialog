@@ -5,7 +5,7 @@ using MonoTouch.UIKit;
 namespace MonoTouch.Dialog
 {
 	public class ActivityElement : UIViewElement, IElementSizing {
-		public ActivityElement () : base ("", new UIActivityIndicatorView (UIActivityIndicatorViewStyle.Gray), false)
+		public ActivityElement () : base ("", new UIActivityIndicatorView (UIActivityIndicatorViewStyle.WhiteLarge), false)
 		{
 			var sbounds = UIScreen.MainScreen.Bounds;			
 			var uia = View as UIActivityIndicatorView;
