@@ -800,7 +800,8 @@ namespace MonoTouch.Dialog
 					img = extraInfo.Image;
 				else 
 					img = null;
-				imgView.Image = img;
+				if(imgView != null)
+					imgView.Image = img;
 				
 				if (cell.DetailTextLabel != null)
 					cell.DetailTextLabel.TextColor = extraInfo.DetailColor ?? UIColor.Black;
