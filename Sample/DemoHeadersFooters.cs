@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using CoreGraphics;
 using System.Linq;
 using MonoTouch.UIKit;
 using MonoTouch.Dialog;
@@ -12,7 +12,7 @@ namespace Sample
 		{
 			var section = new Section () { 
 				HeaderView = new UIImageView (UIImage.FromFile ("caltemplate.png")),
-				FooterView = new UISwitch (new RectangleF (0, 0, 80, 30)),
+				FooterView = new UISwitch (new CGRect (0, 0, 80, 30)),
 			};
 			
 			// Fill in some data 

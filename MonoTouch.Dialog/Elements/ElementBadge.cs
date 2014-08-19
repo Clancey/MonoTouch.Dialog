@@ -11,12 +11,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
-using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.OpenGLES;
-using MonoTouch.CoreAnimation;
+using UIKit;
+using CoreGraphics;
+using Foundation;
+using OpenGLES;
+using CoreAnimation;
 
 namespace MonoTouch.Dialog
 {	
@@ -36,7 +35,7 @@ namespace MonoTouch.Dialog
 	/// </remarks>
 	public class BadgeElement : Element, IElementSizing {
 		static NSString ckey = new NSString ("badgeKey");
-		public event NSAction Tapped;
+		public event Action Tapped;
 		public UILineBreakMode LineBreakMode = UILineBreakMode.TailTruncation;
 		public UIViewContentMode ContentMode = UIViewContentMode.Left;
 		public int Lines = 1;
@@ -49,7 +48,7 @@ namespace MonoTouch.Dialog
 		{
 		}
 
-		public BadgeElement (UIImage badgeImage, string cellText, string detail, NSAction tapped) : base (cellText,detail)
+		public BadgeElement (UIImage badgeImage, string cellText, string detail, Action tapped) : base (cellText,detail)
 		{
 			if (badgeImage == null)
 				throw new ArgumentNullException ("badgeImage");
@@ -101,11 +100,11 @@ namespace MonoTouch.Dialog
 			base.Dispose (disposing);
 		}
 
-		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
-			SizeF size = new SizeF (280, float.MaxValue);
+			CGSize size = new CGSize (280, float.MaxValue);
 			Caption = Caption ?? "";
-			float height = tableView.StringSize (Caption, Font, size, LineBreakMode).Height + 10;
+			var height = tableView.StringSize (Caption, Font, size, LineBreakMode).Height + 10;
 			
 			// Image is 57 pixels tall, add some padding
 			return Math.Max (height, 63);
@@ -125,8 +124,8 @@ namespace MonoTouch.Dialog
 				using (var context = new CGBitmapContext (IntPtr.Zero, 57, 57, 8, 57*4, cs, CGImageAlphaInfo.PremultipliedLast)){
 					//context.ScaleCTM (0.5f, -1);
 					context.TranslateCTM (0, 0);
-					context.DrawImage (new RectangleF (0, 0, 57, 57), template.CGImage);
-					context.SetRGBFillColor (1, 1, 1, 1);
+					context.DrawImage (new CGRect (0, 0, 57, 57), template.CGImage);
+					context.SetFillColor (1, 1, 1, 1);
 					
 					context.SelectFont ("Helvetica", 10f, CGTextEncoding.MacRoman);
 					
@@ -146,7 +145,7 @@ namespace MonoTouch.Dialog
 					context.ShowText (bigText);
 					width = context.TextPosition.X - start;
 					
-					context.SetRGBFillColor (0, 0, 0, 1);
+					context.SetFillColor (0, 0, 0, 1);
 					context.SetTextDrawingMode (CGTextDrawingMode.Fill);
 					context.ShowTextAtPoint ((57-width)/2, 9, bigText);
 					
