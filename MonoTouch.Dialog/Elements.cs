@@ -207,6 +207,8 @@ namespace MonoTouch.Dialog
 	}
 
 	public abstract class BoolElement : Element {
+
+		public Action<bool> ValueUpdated { get; set; }
 		bool val;
 		public bool Value {
 			get {
@@ -217,6 +219,8 @@ namespace MonoTouch.Dialog
 				val = value;
 				if (emit && ValueChanged != null)
 					ValueChanged (this, EventArgs.Empty);
+				if (ValueUpdated != null)
+					ValueUpdated (val);
 			}
 		}
 		public event EventHandler ValueChanged;
@@ -1472,6 +1476,7 @@ namespace MonoTouch.Dialog
 		string placeholder;
 		static UIFont font = UIFont.BoldSystemFontOfSize (17);
 		public Action ReturnPressed {get;set;}
+		public Action<string> ValueUpdated {get;set;}
 		public void CloseKeyboard()
 		{
 			entry.ResignFirstResponder();
@@ -1655,7 +1660,8 @@ namespace MonoTouch.Dialog
 			var newValue = entry.Text;
 			var diff = newValue != Value;
 			Value = newValue;
-			
+			if (ValueUpdated != null)
+				ValueUpdated (newValue);
 		//	if (diff){
 				if (Changed != null)
 					Changed (this, EventArgs.Empty);
