@@ -862,7 +862,7 @@ namespace MonoTouch.Dialog
 			var font = Font ?? UIFont.SystemFontOfSize (14);
 			var height = tableView.StringSize (Caption, font, size, LineBreakMode).Height;
 			height *= 1.5f;
-			return Math.Max(44,height);
+			return NMath.Max(44,height);
 		}
 	}
 	
@@ -984,7 +984,7 @@ namespace MonoTouch.Dialog
 				height = tableView.StringSize (text, font, size, UILineBreakMode.WordWrap).Height + 10;
 			}
 			
-			return Math.Max(height,50);
+			return NMath.Max(height,50);
 		}
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
@@ -1561,7 +1561,7 @@ namespace MonoTouch.Dialog
 				if (size.Width > max.Width)
 					max = size;				
 			}
-			s.EntryAlignment = new CGSize (25 + Math.Min (max.Width, 160), max.Height);
+			s.EntryAlignment = new CGSize (25 + NMath.Min (max.Width, 160), max.Height);
 			return s.EntryAlignment;
 		}
 		

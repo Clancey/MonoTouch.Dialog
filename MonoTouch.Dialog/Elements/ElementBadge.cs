@@ -107,7 +107,7 @@ namespace MonoTouch.Dialog
 			var height = tableView.StringSize (Caption, Font, size, LineBreakMode).Height + 10;
 			
 			// Image is 57 pixels tall, add some padding
-			return Math.Max (height, 63);
+			return NMath.Max (height, 63);
 		}
 
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)

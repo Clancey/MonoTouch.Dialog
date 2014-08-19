@@ -53,7 +53,7 @@ namespace MonoTouch.Dialog {
 			if (MessageCount > 0){
 				var ms = MessageCount.ToString ();
 				ssize = StringSize (ms, CountFont);
-				boxWidth = Math.Min (22 + ssize.Width, 18);
+				boxWidth = NMath.Min (22 + ssize.Width, 18);
 				var crect = new CGRect (Bounds.Width-20-boxWidth, 32, boxWidth, 16);
 				
 				UIColor.Gray.SetFill ();
