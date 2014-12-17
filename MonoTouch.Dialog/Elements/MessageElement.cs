@@ -52,7 +52,7 @@ namespace MonoTouch.Dialog {
 			
 			if (MessageCount > 0){
 				var ms = MessageCount.ToString ();
-				ssize = StringSize (ms, CountFont);
+				ssize = UIStringDrawing.StringSize (ms, CountFont);
 				boxWidth = NMath.Min (22 + ssize.Width, 18);
 				var crect = new CGRect (Bounds.Width-20-boxWidth, 32, boxWidth, 16);
 				
@@ -60,7 +60,7 @@ namespace MonoTouch.Dialog {
 				GraphicsUtil.FillRoundedRect (ctx, crect, 3);
 				UIColor.White.SetColor ();
 				crect.X += 5;
-				DrawString (ms, crect, CountFont);
+				UIStringDrawing.DrawString (ms, crect, CountFont);
 				
 				boxWidth += padright;
 			} else
@@ -77,21 +77,21 @@ namespace MonoTouch.Dialog {
 				label = Date.ToString ("dddd");
 			else
 				label = Date.ToShortDateString ();
-			ssize = StringSize (label, SubjectFont);
+			ssize = UIStringDrawing.StringSize (label, SubjectFont);
 			var dateSize = ssize.Width + padright + 5;
-			DrawString (label, new CGRect (Bounds.Width-dateSize, 6, dateSize, 14), SubjectFont, UILineBreakMode.Clip, UITextAlignment.Left);
+			UIStringDrawing.DrawString (label, new CGRect (Bounds.Width-dateSize, 6, dateSize, 14), SubjectFont, UILineBreakMode.Clip, UITextAlignment.Left);
 			
 			const int offset = 33;
 			var bw = Bounds.Width-offset;
 			
 			UIColor.Black.SetColor ();
-			DrawString (Sender, new CGPoint (offset, 2), bw-dateSize, SenderFont, UILineBreakMode.TailTruncation);
-			DrawString (Subject, new CGPoint (offset, 23), bw-offset-boxWidth, SubjectFont, UILineBreakMode.TailTruncation);
+			UIStringDrawing.DrawString (Sender, new CGPoint (offset, 2), bw-dateSize, SenderFont, UILineBreakMode.TailTruncation);
+			UIStringDrawing.DrawString (Subject, new CGPoint (offset, 23), bw-offset-boxWidth, SubjectFont, UILineBreakMode.TailTruncation);
 			
 			//UIColor.Black.SetFill ();
 			//ctx.FillRect (new CGRect (offset, 40, bw-boxWidth, 34));
 			UIColor.Gray.SetColor ();
-			DrawString (Body, new CGRect (offset, 40, bw-boxWidth, 34), TextFont, UILineBreakMode.TailTruncation, UITextAlignment.Left);
+			UIStringDrawing.DrawString (Body, new CGRect (offset, 40, bw-boxWidth, 34), TextFont, UILineBreakMode.TailTruncation, UITextAlignment.Left);
 			
 			if (NewFlag){
 				ctx.SaveState ();

@@ -104,7 +104,7 @@ namespace MonoTouch.Dialog
 		{
 			CGSize size = new CGSize (280, float.MaxValue);
 			Caption = Caption ?? "";
-			var height = tableView.StringSize (Caption, Font, size, LineBreakMode).Height + 10;
+			var height = UIStringDrawing.StringSize (Caption, Font, size, LineBreakMode).Height + 10;
 			
 			// Image is 57 pixels tall, add some padding
 			return NMath.Max (height, 63);

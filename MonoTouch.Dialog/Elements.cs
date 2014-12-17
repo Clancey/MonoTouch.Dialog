@@ -448,7 +448,7 @@ namespace MonoTouch.Dialog
 			CGSize captionSize = new CGSize (0, 0);
 			if (Caption != null && ShowCaption){
 				cell.TextLabel.Text = Caption;
-				captionSize = cell.TextLabel.StringSize (Caption, UIFont.FromName (cell.TextLabel.Font.Name, UIFont.LabelFontSize));
+				captionSize = UIStringDrawing.StringSize (Caption, UIFont.FromName (cell.TextLabel.Font.Name, UIFont.LabelFontSize));
 				captionSize.Width += 10; // Spacing
 			}
 
@@ -860,7 +860,7 @@ namespace MonoTouch.Dialog
 			CGSize size = new CGSize (280, float.MaxValue);
 			
 			var font = Font ?? UIFont.SystemFontOfSize (14);
-			var height = tableView.StringSize (Caption, font, size, LineBreakMode).Height;
+			var height = UIStringDrawing.StringSize (Caption, font, size, LineBreakMode).Height;
 			height *= 1.5f;
 			return NMath.Max(44,height);
 		}
@@ -974,14 +974,14 @@ namespace MonoTouch.Dialog
 			CGSize sizeC = new CGSize (280, float.MaxValue);
 			using (var font = UIFont.FromName ("Helvetica", 17f))
 			{
-				width = tableView.StringSize (Caption, font, sizeC, UILineBreakMode.WordWrap).Width  + 10;
+				width = UIStringDrawing.StringSize (Caption, font, sizeC, UILineBreakMode.WordWrap).Width  + 10;
 			}
 			
 			CGSize size = new CGSize (280 - width, float.MaxValue);
 			nfloat height;
 			using (var font = UIFont.FromName ("Helvetica", 17f))
 			{
-				height = tableView.StringSize (text, font, size, UILineBreakMode.WordWrap).Height + 10;
+				height = UIStringDrawing.StringSize (text, font, size, UILineBreakMode.WordWrap).Height + 10;
 			}
 			
 			return NMath.Max(height,50);
@@ -1557,7 +1557,7 @@ namespace MonoTouch.Dialog
 				var ee = e as EntryElement;
 				if (ee == null)
 					continue;
-				var size = tv.StringSize (ee.Caption, font);
+				var size = UIStringDrawing.StringSize (ee.Caption, font);
 				if (size.Width > max.Width)
 					max = size;				
 			}
@@ -1767,7 +1767,7 @@ namespace MonoTouch.Dialog
 		public virtual string FormatDate (DateTime dt)
 		{
 			dt = GetDateWithKind (dt);
-			return fmt.ToString (dt) + " " + dt.ToLocalTime ().ToShortTimeString ();
+			return fmt.ToString ((NSDate)dt) + " " + dt.ToLocalTime ().ToShortTimeString ();
 		}
 
 		public virtual UIDatePicker CreatePicker ()
@@ -1775,7 +1775,7 @@ namespace MonoTouch.Dialog
 			var picker = new UIDatePicker (CGRect.Empty){
 				AutoresizingMask = UIViewAutoresizing.FlexibleWidth,
 				Mode = UIDatePickerMode.DateAndTime,
-				Date = DateValue
+				Date = (NSDate)DateValue
 			};
 			return picker;
 		}
@@ -1813,7 +1813,7 @@ namespace MonoTouch.Dialog
 			public override void ViewWillDisappear (bool animated)
 			{
 				base.ViewWillDisappear (animated);
-				container.DateValue = container.datePicker.Date;
+				container.DateValue = (DateTime)container.datePicker.Date;
 				if (container.DateSelected != null)
 					container.DateSelected (container);
 			}
@@ -1853,7 +1853,7 @@ namespace MonoTouch.Dialog
 		
 		public override string FormatDate (DateTime dt)
 		{
-			return fmt.ToString (dt);
+			return fmt.ToString ((NSDate)dt);
 		}
 		
 		public override UIDatePicker CreatePicker ()
