@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{AE28F991-5719-45C8-816C-9A30EC138651}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Dialog</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Elements.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Elements\ActivityElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Elements\ElementBadge.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Elements\MessageElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Elements\OwnerDrawnElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Controls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\GlassButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Graphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ImageLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\LRUCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DialogViewController.cs" />
+  </ItemGroup>
+</Project>

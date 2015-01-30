@@ -34,7 +34,7 @@ public class LRUCache<TKey, TValue> where TValue : class, IDisposable  {
 	Dictionary<LinkedListNode<TValue>, TKey> revdict;
 	LinkedList<TValue> list;
 	int entryLimit, sizeLimit, currentSize;
-	Func<TValue,int> slotSizeFunc;
+	Func<TValue,int> slotCGSizeunc;
 	
 	public LRUCache (int entryLimit) : this (entryLimit, 0, null)
 	{
@@ -51,7 +51,7 @@ public class LRUCache<TKey, TValue> where TValue : class, IDisposable  {
 		
 		this.entryLimit = entryLimit;
 		this.sizeLimit = sizeLimit;
-		this.slotSizeFunc = slotSizer;
+		this.slotCGSizeunc = slotSizer;
 	}
 
 	void Evict ()
@@ -60,7 +60,7 @@ public class LRUCache<TKey, TValue> where TValue : class, IDisposable  {
 		var key = revdict [last];
 		
 		if (sizeLimit > 0){
-			int size = slotSizeFunc (last.Value);
+			int size = slotCGSizeunc (last.Value);
 			currentSize -= size;
 		}
 		
@@ -98,11 +98,11 @@ public class LRUCache<TKey, TValue> where TValue : class, IDisposable  {
 
 		set {
 			LinkedListNode<TValue> node;
-			int size = sizeLimit > 0 ? slotSizeFunc (value) : 0;
+			int size = sizeLimit > 0 ? slotCGSizeunc (value) : 0;
 			
 			if (dict.TryGetValue (key, out node)){
 				if (sizeLimit > 0 && node.Value != null){
-					int repSize = slotSizeFunc (node.Value);
+					int repSize = slotCGSizeunc (node.Value);
 					currentSize -= repSize;
 					currentSize += size;
 				}

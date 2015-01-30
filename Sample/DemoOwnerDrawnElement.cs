@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using CoreGraphics;
 using MonoTouch.CoreFoundation;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
@@ -94,35 +94,35 @@ namespace Sample
 			}
 		}
 		
-		public override void Draw (RectangleF bounds, CGContext context, UIView view)
+		public override void Draw (CGRect bounds, CGContext context, UIView view)
 		{
 			UIColor.White.SetFill ();
 			context.FillRect (bounds);
 			
-			context.DrawLinearGradient (gradient, new PointF (bounds.Left, bounds.Top), new PointF (bounds.Left, bounds.Bottom), CGGradientDrawingOptions.DrawsAfterEndLocation);
+			context.DrawLinearGradient (gradient, new CGPoint (bounds.Left, bounds.Top), new CGPoint (bounds.Left, bounds.Bottom), CGGradientDrawingOptions.DrawsAfterEndLocation);
 			
 			UIColor.Black.SetColor ();
-			view.DrawString(this.From, new RectangleF(10, 5, bounds.Width/2, 10 ), fromFont, UILineBreakMode.TailTruncation);
+			view.DrawString(this.From, new CGRect(10, 5, bounds.Width/2, 10 ), fromFont, UILineBreakMode.TailTruncation);
 			
 			UIColor.Brown.SetColor ();
-			view.DrawString(this.Sent, new RectangleF(bounds.Width/2, 5, (bounds.Width/2) - 10, 10 ), dateFont, UILineBreakMode.TailTruncation, UITextAlignment.Right);
+			view.DrawString(this.Sent, new CGRect(bounds.Width/2, 5, (bounds.Width/2) - 10, 10 ), dateFont, UILineBreakMode.TailTruncation, UITextAlignment.Right);
 			
 			UIColor.DarkGray.SetColor();
-			view.DrawString(this.Subject, new RectangleF(10, 30, bounds.Width - 20, TextHeight(bounds) ), subjectFont, UILineBreakMode.WordWrap);
+			view.DrawString(this.Subject, new CGRect(10, 30, bounds.Width - 20, TextHeight(bounds) ), subjectFont, UILineBreakMode.WordWrap);
 		}
 		
-		public override float Height (RectangleF bounds)
+		public override float Height (CGRect bounds)
 		{
 			var height = 40.0f + TextHeight (bounds);
 			return height;
 		}
 		
-		private float TextHeight (RectangleF bounds)
+		private float TextHeight (CGRect bounds)
 		{
-			SizeF size;
+			CGSize size;
 			using (NSString str = new NSString (this.Subject))
 			{
-				size = str.StringSize (subjectFont, new SizeF (bounds.Width - 20, 1000), UILineBreakMode.WordWrap);
+				size = str.StringSize (subjectFont, new CGSize (bounds.Width - 20, 1000), UILineBreakMode.WordWrap);
 			}			
 			return size.Height;
 		}

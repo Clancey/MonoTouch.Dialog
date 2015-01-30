@@ -3,7 +3,7 @@
 // sample code for new elements. 
 //
 using System;
-using System.Drawing;
+using CoreGraphics;
 using System.Threading;
 using MonoTouch.CoreFoundation;
 using MonoTouch.Foundation;
@@ -94,7 +94,7 @@ namespace MonoTouch.Dialog
 				tapped (this);
 		}
 		
-		SizeF GetTextSize ()
+		CGSize GetTextSize ()
 		{
 			return new NSString (caption.Text).StringSize (font, UIScreen.MainScreen.Bounds.Width, UILineBreakMode.TailTruncation);
 		}
@@ -114,9 +114,9 @@ namespace MonoTouch.Dialog
 			var size = GetTextSize ();
 			
 			if (!activityIndicator.Hidden)
-				activityIndicator.Frame = new RectangleF ((sbounds.Width-size.Width)/2-isize*2, pad, isize, isize);
+				activityIndicator.Frame = new CGRect ((sbounds.Width-size.Width)/2-isize*2, pad, isize, isize);
 
-			caption.Frame = new RectangleF (10, pad, sbounds.Width-20, size.Height);
+			caption.Frame = new CGRect (10, pad, sbounds.Width-20, size.Height);
 		}
 		
 		public UITextAlignment Alignment {

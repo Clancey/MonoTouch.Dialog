@@ -4,7 +4,7 @@ using MonoTouch.UIKit;
 using MonoTouch.Dialog;
 using MonoTouch.Dialog.Utilities;
 using System.Threading;
-using System.Drawing;
+using CoreGraphics;
 
 namespace Sample
 {
@@ -14,7 +14,7 @@ namespace Sample
 		{
 			var imageBackground = new Uri ("file://" + Path.GetFullPath ("background.png"));
 			var image = ImageLoader.DefaultRequestImage (imageBackground, null);
-			var small = image.Scale (new SizeF (32, 32));
+			var small = image.Scale (new CGSize (32, 32));
 			
 			var imageIcon = new StyledStringElement ("Local image icon") {
 				Image = small

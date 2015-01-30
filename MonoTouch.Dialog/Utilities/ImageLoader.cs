@@ -28,9 +28,9 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
+using Foundation;
+using UIKit;
+using CoreGraphics;
 using MonoTouch.Dialog.Utilities;
 using System.Security.Cryptography;
 
@@ -125,7 +125,7 @@ namespace MonoTouch.Dialog.Utilities
 		static int sizer (UIImage img)
 		{
 			var cg = img.CGImage;
-			return cg.BytesPerRow * cg.Height;
+			return (int)cg.BytesPerRow * (int)cg.Height;
 		}
 
 		/// <summary>
